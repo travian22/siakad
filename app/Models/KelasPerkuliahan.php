@@ -15,7 +15,16 @@ class KelasPerkuliahan extends Model
     /** @use HasFactory<KelasPerkuliahanFactory> */
     use HasFactory;
 
+    public const array DAYS = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+
     protected $table = 'kelas_perkuliahan';
+
+    public function daySortOrder(): int
+    {
+        $index = array_search($this->hari, self::DAYS, true);
+
+        return $index === false ? 99 : $index + 1;
+    }
 
     public function periodeAkademik(): BelongsTo
     {

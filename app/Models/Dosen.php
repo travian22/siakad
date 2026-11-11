@@ -26,4 +26,12 @@ class Dosen extends Model
     {
         return $this->hasMany(KelasPerkuliahan::class);
     }
+
+    public function isProfileComplete(): bool
+    {
+        return filled($this->jenis_kelamin)
+            && filled($this->telepon)
+            && filled($this->alamat)
+            && filled($this->foto_profil);
+    }
 }

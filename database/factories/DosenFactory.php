@@ -33,6 +33,7 @@ class DosenFactory extends Factory
             'jenis_kelamin' => fake()->randomElement(['L', 'P']),
             'telepon' => fake()->phoneNumber(),
             'alamat' => fake()->address(),
+            'foto_profil' => 'profiles/dosen-default.jpg',
         ]);
     }
 }

@@ -36,4 +36,10 @@ class Mahasiswa extends Model
     {
         return $this->hasMany(BiayaKuliah::class);
     }
+
+    public function isProfileComplete(): bool
+    {
+        return filled($this->jenis_kelamin)
+            && filled($this->alamat);
+    }
 }

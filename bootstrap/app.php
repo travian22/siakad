@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\CheckProfileComplete;
+use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -12,7 +14,22 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->alias([
+            'role' => RoleMiddleware::class,
+            'profile.complete' => CheckProfileComplete::class,
+        ]);
+
+        $middleware->redirectGuestsTo(fn (Request $request): string => route('login'));
+
+        $middleware->redirectUsersTo(function (Request $request): string {
+            $user = $request->user();
+
+            if (! $user) {
+                return route('login');
+            }
+
+            return route($user->dashboardRouteName());
+        });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

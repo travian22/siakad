@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Database\Factories\PeriodeAkademikFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -24,6 +25,16 @@ class PeriodeAkademik extends Model
         return [
             'is_active' => 'boolean',
         ];
+    }
+
+    public static function currentActive(): ?self
+    {
+        return static::query()->where('is_active', true)->first();
+    }
+
+    public function scopeOrdered(Builder $query): Builder
+    {
+        return $query->orderByDesc('is_active')->orderByDesc('id');
     }
 
     public function kelasPerkuliahan(): HasMany
